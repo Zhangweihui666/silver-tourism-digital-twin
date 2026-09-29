@@ -18,6 +18,7 @@
 ![Node](https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=nodedotjs&logoColor=white)
 ![OSM](https://img.shields.io/badge/data-OpenStreetMap-7ebc6f?logo=openstreetmap&logoColor=white)
 ![Research](https://img.shields.io/badge/use-research%20prototype-f0b429)
+![License](https://img.shields.io/badge/license-MIT-34c759)
 
 [功能亮点](#功能亮点) · [快速开始](#快速开始) · [研究流程](#推荐研究流程) · [数据与隐私](#数据来源与隐私) · [English](#english-overview)
 
@@ -130,6 +131,10 @@ flowchart LR
 
 如果本项目进入你的论文、课程或研究报告，请使用仓库中的 [CITATION.cff](CITATION.cff)。
 
+## 开源许可证
+
+本项目采用 [MIT License](LICENSE)。欢迎在保留版权与许可声明的前提下使用、修改和传播。
+
 ## English overview
 
 **Silver Tourism Semantic Digital Twin Studio** is an integrated research prototype for building editable semantic scenes of historic districts and evaluating age-friendly spatial interventions with 500 heterogeneous pedestrian agents.
@@ -137,6 +142,8 @@ flowchart LR
 It combines real OSM geometry, optional domestic map selection, photo/trajectory/GeoJSON inputs, object-level 3D editing, task-based agent simulation, intervention controls, and publication-oriented figure export. The three core research dimensions are facility accessibility, wayfinding legibility, and environmental safety.
 
 Quick demo: run `npm start`, open `http://127.0.0.1:8092`, load the editable district sample, inspect the Agent and Task modules, run an intervention scenario, and export figures or GLB.
+
+Licensed under the [MIT License](LICENSE).
 
 ---
 
