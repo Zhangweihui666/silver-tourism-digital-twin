@@ -8,6 +8,12 @@
 
 ![Project concept cover](docs/images/hero.png)
 
+<sub>概念封面：展示项目研究愿景。</sub>
+
+![Actual v3.5.0 interface preview](docs/images/interface-preview.png)
+
+<sub>v3.5.0 实际运行界面预览：场景重建、语义复核、数据质量与可编辑数字孪生入口。</sub>
+
 ![Version](https://img.shields.io/badge/version-3.5.0-2f81f7)
 ![Node](https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=nodedotjs&logoColor=white)
 ![OSM](https://img.shields.io/badge/data-OpenStreetMap-7ebc6f?logo=openstreetmap&logoColor=white)
