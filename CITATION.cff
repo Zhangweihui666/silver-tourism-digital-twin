@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this research prototype, please cite the repository and the archived release you used."
+title: "Silver Tourism Semantic Digital Twin Studio"
+type: software
+version: 3.5.0
+authors:
+  - family-names: "Zhang"
+    given-names: "Weihui"
+repository-code: "https://github.com/Zhangweihui666/silver-tourism-digital-twin"
+url: "https://github.com/Zhangweihui666/silver-tourism-digital-twin"
+date-released: 2026-09-29
+keywords:
+  - digital twin
+  - agent-based simulation
+  - historic district
+  - age-friendly tourism
+  - OpenStreetMap
+

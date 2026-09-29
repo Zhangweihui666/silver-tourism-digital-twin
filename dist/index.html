@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>银发历史街区高保真三维仿真实验室</title>
+  <script type="module" crossorigin src="/assets/index-BRwBJUt_.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-D9rK_Eq4.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">SILVER TOURISM · DIGITAL TWIN STUDIO</div>
+        <h1>银发历史文化街区高保真三维仿真实验室</h1>
+        <p>真实OSM建筑轮廓与道路网络 · 可编辑多边形碰撞资产 · 500 Agent 仿真 · Scientific Figure 自动绘图</p>
+      </div>
+      <div class="top-actions">
+        <button id="sampleSplatBtn" class="primary">加载标准 3DGS 示例</button>
+        <button id="sampleBtn">加载可编辑街区示例</button>
+        <button id="focusBtn">聚焦选中</button><button id="enterWorldBtn">进入世界</button><button id="overviewWorldBtn">整体观察</button>
+        <span id="appVersion" class="chip">v3.5.0</span><span id="status" class="status">就绪</span>
+      </div>
+    </header>
+    <main class="layout">
+      <aside class="left-panel panel">
+        <nav class="tabs">
+          <button class="tab active" data-tab="reconstruction">场景重建</button><button class="tab" data-tab="objects">对象</button><button class="tab" data-tab="agents">Agent</button><button class="tab" data-tab="tasks">任务</button><button class="tab" data-tab="simulation">仿真</button><button class="tab" data-tab="figures">图表编辑</button><button class="tab" data-tab="export">导出</button>
+        </nav>
+        <section class="tab-page active reconstruction-tab-page" data-page="reconstruction">
+          <div class="reconstruction-workbench">
+            <div class="reconstruction-sidebar">
+              <div class="card reconstruction-entry-card">
+                <h2>1. 你现在有什么资料？</h2>
+                <div class="reconstruction-entry-grid">
+                  <button type="button" class="reconstruction-entry active" data-reconstruction-entry="place"><b>我只知道研究地点</b><small>输入地点名称，自动建立道路与建筑骨架</small></button>
+                  <button type="button" class="reconstruction-entry" data-reconstruction-entry="photos"><b>我有地点照片</b><small>上传普通照片或360°全景图补充设施与外观</small></button>
+                  <button type="button" class="reconstruction-entry" data-reconstruction-entry="field"><b>我可以去现场拍摄</b><small>导入手机定位轨迹、视频和现场照片</small></button>
+                  <button type="button" class="reconstruction-entry" data-reconstruction-entry="professional"><b>我有专业地图资料</b><small>直接导入GeoJSON等空间对象数据</small></button>
+                </div>
+              </div>
+              <div id="placeEntryPanel" class="card reconstruction-entry-panel">
+                <h2>2. 输入研究地点</h2>
+                <label>研究地点名称<input id="destinationName" type="text" placeholder="例如：成都宽窄巷子、苏州平江路"></label>
+                <label>地点数据来源<select id="locationProvider"><option value="osm" selected>OpenStreetMap 真实空间数据</option><option value="amap">高德选点 + OSM真实几何</option><option value="baidu">百度选点 + OSM真实几何</option><option value="local">内置默认真实轮廓示范场景</option></select></label>
+                <div id="locationApiKeyRow" class="hidden"><label>地图 API Key<input id="locationApiKey" type="password" autocomplete="off" placeholder="仅用于当前请求，不会保存"></label></div>
+                <label>城市 / 区域<input id="destinationRegion" type="text" placeholder="例如：成都、苏州；可留空"></label>
+                <label>三维重建样式<select id="domesticReconstructionStyle"><option value="map3d" selected>map3d 真实多边形挤出</option><option value="voxcity">VoxCity 真实语义分层风格</option></select></label>
+                <label>研究范围<select id="destinationRadius"><option value="150">核心空间（半径150米）</option><option value="250" selected>景区与主要出入口（半径250米）</option><option value="400">景区及周边道路（半径400米）</option><option value="600">扩展研究区（半径600米）</option></select></label>
+                <button id="searchDestinationBtn" class="primary full">搜索研究地点</button>
+                <div id="placeSearchResults" class="place-search-results"></div>
+                <div id="selectedPlaceSummary" class="place-selection-summary hidden"></div>
+                <button id="buildPlaceSkeletonBtn" class="primary full" disabled>生成真实三维空间</button>
+                <div id="placeDataStatus" class="hint"></div>
+              </div>
+              <div id="photosEntryPanel" class="card reconstruction-entry-panel hidden">
+                <div class="section-heading"><h2>2. 上传地点照片</h2><span id="reconstructionImageCount" class="chip">0 / 12 张</span></div>
+                <label class="file-button">上传普通图片或360°全景图<input id="sceneImages" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
+                <div id="reconstructionViews" class="reconstruction-views"></div>
+                <button id="analyzeLocalBtn" class="full">识别照片中的道路、建筑与设施</button>
+              </div>
+              <div id="fieldEntryPanel" class="card reconstruction-entry-panel hidden">
+                <h2>2. 导入现场采集资料</h2>
+                <label class="file-button">上传手机轨迹 GPX / CSV<input id="fieldTrackFile" type="file" accept=".gpx,.csv,.tsv,.txt"></label>
+                <button id="importFieldTrackBtn" class="primary full">生成现场游览路线骨架</button>
+                <label class="file-button">上传现场照片或视频<input id="fieldMediaFiles" type="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime" multiple></label>
+                <div id="fieldImportStatus" class="hint"></div>
+              </div>
+              <div id="professionalEntryPanel" class="card reconstruction-entry-panel hidden">
+                <h2>2. 导入专业空间资料</h2>
+                <label class="file-button">上传 GeoJSON<input id="geoJsonFile" type="file" accept=".geojson,.json,application/geo+json,application/json"></label>
+                <button id="importGeoJsonBtn" class="primary full">导入并生成语义对象</button>
+                <div id="professionalImportStatus" class="hint"></div>
+              </div>
+              <div class="card">
+                <h2>3. 范围与人工复核</h2>
+                <label>场景宽度（米）<input id="reconstructionSceneWidth" type="number" min="10" step="1" value="60"></label>
+                <label>场景深度（米）<input id="reconstructionSceneDepth" type="number" min="10" step="1" value="100"></label>
+                <label>画布工具<select id="reconstructionTool"><option value="select">选择 / 调整顶点</option><option value="anchor">绘制真实尺度线</option><option value="add">框选新增语义对象</option></select></label>
+                <label>新增对象类型<select id="manualObjectType"><option value="building">建筑</option><option value="road">道路</option><option value="sidewalk">人行道</option><option value="plaza">广场</option><option value="stairs">台阶</option><option value="poi">设施目标</option><option value="vehicle">车辆</option><option value="tree">树木</option><option value="sign">导视牌</option><option value="bench">座椅</option><option value="barrier">隔离设施</option><option value="light">路灯</option></select></label>
+                <label>尺度线真实长度（米）<input id="anchorLength" type="number" min="0.1" step="0.1" value="3.5"></label>
+                <button id="applyAnchorBtn" class="full">应用尺度锚点</button>
+                <div id="anchorResult" class="hint">地点或专业数据会自动建立米制尺度</div>
+                <select id="reconstructionMode" class="hidden"><option value="measured" selected>语义数字孪生</option><option value="multiview">多视角</option><option value="quick">快速</option></select>
+              </div>
+              <details class="card reconstruction-advanced">
+                <summary>可选高级来源</summary>
+                <h3>Marble云端视觉重建</h3>
+                <label>World API Key<input id="worldLabsApiKey" type="password" autocomplete="off"></label>
+                <label>模型<select id="worldLabsModel"><option value="marble-1.1-plus" selected>Marble 1.1 Plus</option><option value="marble-1.1">Marble 1.1</option><option value="marble-1.0">Marble 1.0</option><option value="marble-1.0-draft">Marble Draft</option></select></label>
+                <label>视觉质量<select id="worldLabsQuality"><option value="full_res">Full Resolution</option><option value="500k">500k</option><option value="100k">100k</option></select></label>
+                <label>场景提示<input id="worldLabsPrompt" value="保持上传场景的建筑、道路、设施、尺度关系和空间布局"></label>
+                <button id="generateWorldLabsBtn" class="full">生成Marble视觉世界</button>
+                <button id="resumeWorldLabsBtn" class="full hidden">继续上次Marble任务</button>
+                <div id="worldLabsState" class="hint"></div>
+                <h3>可选多模态识别</h3>
+                <label>平台<select id="reconstructionProvider"><option value="siliconflow">硅基流动</option><option value="custom">其他兼容平台</option></select></label>
+                <label>接口<input id="reconstructionBaseUrl" value="https://api.siliconflow.cn/v1"></label>
+                <label>视觉模型<input id="reconstructionModel" value="Qwen/Qwen3-Omni-30B-A3B-Instruct"></label>
+                <label>API Key<input id="reconstructionApiKey" type="password" autocomplete="off"></label>
+                <button id="analyzeAiBtn" class="full">使用大模型识别语义对象</button>
+                <h3>已有三维文件</h3>
+                <label class="file-button">选择3DGS / 网格文件<input id="sceneFile" type="file" accept=".ply,.splat,.ksplat,.spz,.glb,.gltf,.obj"></label>
+                <div id="fileName" class="hint"></div>
+                <button id="loadSceneBtn" class="full">导入到当前场景</button>
+              </details>
+            </div>
+            <div class="reconstruction-main">
+              <div class="reconstruction-canvas-toolbar"><div><b>地点布局与语义对象复核</b></div><div><button id="clearReconstructionBtn">清空解析结果</button></div></div>
+              <div class="reconstruction-canvas-stage"><canvas id="reconstructionCanvas"></canvas></div>
+              <div class="reconstruction-table-wrap"><div class="section-heading"><b>对象复核表</b><span id="reconstructionObjectCount" class="hint">0 个对象</span></div><table class="reconstruction-table"><thead><tr><th>采用</th><th>类别</th><th>名称</th><th>对象ID</th><th>宽m</th><th>深m</th><th>高m</th><th>置信度</th><th></th></tr></thead><tbody id="reconstructionObjectBody"></tbody></table></div>
+            </div>
+            <div class="reconstruction-quality-panel">
+              <div class="card"><h2>4. 数据质量</h2><div id="reconstructionQuality" class="quality-grid"></div><div id="reconstructionWarnings" class="quality-warnings"></div></div>
+              <div class="card"><h2>5. 生成可编辑场景</h2><label class="check"><input id="replaceSceneOnGenerate" type="checkbox" checked>替换当前可编辑场景</label><button id="generateReconstructionBtn" class="primary full">生成三维数字孪生与碰撞体</button></div>
+              <div class="card"><h2>显示质量</h2><label>曝光<input id="exposure" type="range" min="0.5" max="2" step="0.01" value="1.05"><output>1.05</output></label><label>阴影质量<select id="shadowQuality"><option value="1024">标准</option><option value="2048" selected>高</option><option value="4096">超高</option></select></label><label class="check"><input id="showGrid" type="checkbox">显示网格</label><label class="check"><input id="showAgents" type="checkbox" checked>显示Agent</label></div>
+              <div class="card"><h2>创建语义对象</h2><div class="button-grid"><button data-add="building">建筑</button><button data-add="road">道路</button><button data-add="sidewalk">人行道</button><button data-add="stairs">台阶</button><button data-add="poi">设施目标</button><button data-add="vehicle">汽车</button><button data-add="sign">导视牌</button><button data-add="bench">座椅</button><button data-add="barrier">隔离设施</button><button data-add="tree">树木</button><button data-add="light">路灯</button></div></div>
+            </div>
+          </div>
+        </section>
+        <section class="tab-page" data-page="objects">
+          <div class="card"><h2>场景层级</h2><div id="objectTree" class="object-tree"></div></div>
+          <div class="card"><div class="section-heading"><h2>对象编辑</h2><span id="selectedName" class="chip">未选中</span></div><div class="toolbar"><button data-mode="translate">移动</button><button data-mode="rotate">旋转</button><button data-mode="scale">缩放</button></div><div class="toolbar"><button id="duplicateBtn">复制</button><button id="copyBtn">复制参数</button><button id="pasteBtn">粘贴参数</button><button id="deleteBtn" class="danger">删除</button></div><h3>精确变换</h3><div class="vector-grid"><b>位置</b><input data-transform="px" type="number" step="0.1"><input data-transform="py" type="number" step="0.1"><input data-transform="pz" type="number" step="0.1"></div><div class="vector-grid"><b>旋转°</b><input data-transform="rx" type="number" step="1"><input data-transform="ry" type="number" step="1"><input data-transform="rz" type="number" step="1"></div><div class="vector-grid"><b>缩放</b><input data-transform="sx" type="number" step="0.05"><input data-transform="sy" type="number" step="0.05"><input data-transform="sz" type="number" step="0.05"></div><h3>单侧挤压 / 拉伸</h3><div class="toolbar"><button data-extrude="x:-0.1">X−</button><button data-extrude="x:0.1">X+</button><button data-extrude="y:-0.1">Y−</button><button data-extrude="y:0.1">Y+</button><button data-extrude="z:-0.1">Z−</button><button data-extrude="z:0.1">Z+</button></div><h3>材质</h3><label>颜色<input id="materialColor" type="color" value="#c7b28c"></label><label>粗糙度<input id="roughness" type="range" min="0" max="1" step="0.01" value="0.75"><output>0.75</output></label><label>金属度<input id="metalness" type="range" min="0" max="1" step="0.01" value="0.05"><output>0.05</output></label><label class="check"><input id="visibleToggle" type="checkbox" checked>可见</label></div>
+        </section>
+        <section class="tab-page" data-page="agents">
+          <div class="card"><div class="section-heading"><h2>Agent 总量</h2><output id="agentCountOut">500</output></div><input id="agentCount" type="range" min="1" max="2000" value="500"><label class="file-button">上传特征 CSV / TSV / JSON<input id="featureFile" type="file" accept=".csv,.tsv,.json"></label><button id="loadFeatureBtn" class="full">导入并自动匹配</button></div>
+          <div class="card"><h2>年龄层参数</h2><div id="cohortEditor"></div><button id="regenerateBtn" class="primary full">重生成 Agent</button></div>
+          <div class="card"><h2>外观与形象</h2><label>身高范围<span><input id="heightMin" type="number" min="0.7" max="1.3" step="0.01" value="0.88"> — <input id="heightMax" type="number" min="0.7" max="1.3" step="0.01" value="1.08"></span></label><label>体型范围<span><input id="bodyMin" type="number" min="0.6" max="1.5" step="0.01" value="0.82"> — <input id="bodyMax" type="number" min="0.6" max="1.5" step="0.01" value="1.18"></span></label><label>帽子比例<input id="hatRate" type="number" min="0" max="1" step="0.01" value="0.22"></label><label>背包比例<input id="backpackRate" type="number" min="0" max="1" step="0.01" value="0.28"></label><label>手杖比例<input id="caneRate" type="number" min="0" max="1" step="0.01" value="0.18"></label><label>统一服装色<input id="appearanceColor" type="color" value="#3478c9"></label><div class="toolbar"><button id="randomAppearanceBtn" class="primary">一键随机分配</button><button id="uniformAppearanceBtn">统一外观</button></div><h3>单个 Agent 覆盖</h3><label>Agent 编号<input id="appearanceAgentId" type="number" min="1" value="1"></label><label>服装颜色<input id="selectedAppearanceColor" type="color" value="#3478c9"></label><label>肤色<input id="selectedSkinTone" type="color" value="#d8e2ec"></label><label>身高<input id="selectedHeight" type="number" min="0.7" max="1.3" step="0.01" value="1"></label><label>体型<input id="selectedBody" type="number" min="0.6" max="1.5" step="0.01" value="1"></label><label class="check"><input id="selectedHat" type="checkbox">帽子</label><label class="check"><input id="selectedBackpack" type="checkbox">背包</label><label class="check"><input id="selectedCane" type="checkbox">手杖</label><button id="applySelectedAppearanceBtn" class="full">应用到指定 Agent</button></div>
+          <div class="card"><h2>第一视角检查</h2><div id="agentInspector" class="notice"></div></div>
+        </section>
+        <section class="tab-page" data-page="tasks">
+          <div class="card"><h2>研究任务分配</h2><label>分配方式<select id="assignmentMode"><option value="balanced">年龄层分层均衡（推荐）</option><option value="feature">行为特征匹配</option></select></label><button id="assignTasksBtn" class="primary full">为每个 Agent 分配1个子任务</button><div id="taskDistribution" class="notice"></div></div>
+          <div class="card"><div class="section-heading"><h2>三级任务库</h2><button id="addTaskBtn">新增子任务</button></div><div id="taskEditor"></div></div>
+          <div class="card"><h2>Agent 决策模式</h2><label>模式<select id="controlMode"><option value="default">默认行为仿真</option><option value="llm-group">分组大模型策略</option></select></label><label>每组 Agent 数<input id="groupSize" type="number" min="1" max="500" value="50"></label><button id="buildGroupsBtn" class="full">生成策略组</button><div id="llmGroupEditor"></div><button id="requestStrategiesBtn" class="primary full">调用各组API生成策略</button></div>
+          <div class="card"><h2>任务完成分析</h2><div id="taskMetrics" class="metric-grid"></div><div id="taskResultTable" class="task-table"></div></div>
+        </section>
+        <section class="tab-page" data-page="simulation">
+          <div class="card"><h2>仿真控制</h2><label>时长（分钟）<input id="duration" type="number" min="1" max="180" value="30"></label><label>时间倍率<input id="timeScale" type="number" min="0.25" max="30" step="0.25" value="4"></label><label>目标数 / Agent<input id="targets" type="number" min="1" max="20" value="6"></label><label>随机种子<input id="seed" type="number" value="20260812"></label><div class="toolbar"><button id="startBtn" class="primary">开始</button><button id="pauseBtn">暂停</button><button id="stopBtn" class="danger">停止</button></div><div class="clock"><b id="clock">00:00</b><span id="simState">未运行</span></div></div>
+          <div class="card"><h2>空间干预参数</h2><div id="scenarioEditor"></div><div class="toolbar"><button id="randomScenarioBtn">随机方案</button><button id="applyScenarioBtn" class="primary">应用方案</button></div></div><div class="card"><h2>实时指标</h2><div id="metrics" class="metric-grid"></div><canvas id="liveChart" width="480" height="220"></canvas></div>
+        </section>
+
+        <section class="tab-page figure-tab-page" data-page="figures">
+          <div class="figure-workbench">
+            <aside class="figure-library-panel"><div class="figure-panel-title"><b>图表库</b><button id="figureGenerateBtn" class="primary">刷新</button></div><div id="figureLibrary" class="figure-library"></div></aside>
+            <main class="figure-canvas-panel"><div class="figure-canvas-toolbar"><span id="figureEditorStatus"></span><div><button id="figureScientificBtn" class="primary">Scientific Figure 120 DPI</button><button id="figureResetBtn">恢复</button><button id="figureExportPngBtn">PNG</button><button id="figureExportSvgBtn">SVG</button><button id="figureExportJsonBtn">JSON</button></div></div><div class="figure-canvas-stage"><canvas id="figureEditorCanvas"></canvas></div></main>
+            <aside class="figure-property-panel">
+              <details open><summary>基础设置</summary><label>标题<input id="figureTitle" type="text"></label><label>副标题<input id="figureSubtitle" type="text"></label><label>图表类型<select id="figureType"><option value="bar">柱状图</option><option value="groupedBar">分组柱状图</option><option value="stackedBar">堆叠柱状图</option><option value="horizontalBar">横向条形图</option><option value="line">折线图</option><option value="multiLine">多折线图</option><option value="stepLine">阶梯折线图</option><option value="area">面积图</option><option value="stackedArea">堆叠面积图</option><option value="scatter">散点图</option><option value="bubble">气泡图</option><option value="histogram">直方图</option><option value="boxplot">箱线图</option><option value="violin">小提琴图</option><option value="heatmap">热力图</option><option value="pie">饼图</option><option value="donut">环形图</option><option value="radar">雷达图</option><option value="polar">极坐标图</option><option value="waterfall">瀑布图</option><option value="funnel">漏斗图</option><option value="gauge">仪表盘</option><option value="lollipop">棒棒糖图</option><option value="dotPlot">点图</option><option value="errorBar">误差棒图</option><option value="contour">等高线图</option></select></label><label>背景色<input id="figureBackground" type="color" value="#ffffff"></label></details>
+              <details open><summary>坐标轴</summary><label>X轴标题<input id="figureXLabel" type="text"></label><label>Y轴标题<input id="figureYLabel" type="text"></label><label>Y轴最小值<input id="figureYMin" type="number" step="0.1"></label><label>Y轴最大值<input id="figureYMax" type="number" step="0.1"></label></details>
+              <details><summary>画布与样式</summary><label>宽度<input id="figureWidth" type="number" min="400" step="50"></label><label>高度<input id="figureHeight" type="number" min="300" step="50"></label><label>字号<input id="figureFontSize" type="number" min="8" max="48"></label><label>线宽<input id="figureLineWidth" type="number" min="1" max="12" step="0.5"></label><label>点大小<input id="figurePointRadius" type="number" min="1" max="18"></label><label>图例位置<select id="figureLegendPosition"><option value="top">顶部</option><option value="right">右侧</option><option value="bottom">底部</option></select></label><label class="check"><input id="figureGrid" type="checkbox" checked>网格线</label><label class="check"><input id="figureLegend" type="checkbox" checked>图例</label><label class="check"><input id="figureShowValues" type="checkbox">数值标签</label></details>
+              <details open><summary>系列原子编辑</summary><div id="figureSeriesEditor"></div></details>
+              <details open><summary>画布元素编辑</summary><div id="figureElementEditor" class="figure-element-editor"></div></details>
+              <details open><summary>可视化数据表</summary><div id="figureDataTable" class="figure-data-table"></div><button id="figureAddRowBtn">新增数据行</button><button id="figureAddSeriesBtn">新增系列</button></details>
+              <details><summary>高级 JSON</summary><textarea id="figureDataEditor" spellcheck="false"></textarea><button id="figureApplyDataBtn" class="primary full">应用 JSON 修改</button></details>
+            </aside>
+          </div>
+        </section>
+        <section class="tab-page" data-page="export">
+          <div class="card"><h2>科研图表与数据包</h2><div id="figureStatus" class="notice"></div><button id="generateFiguresBtn" class="full">重新生成 Scientific Figures</button><button id="exportPackageBtn" class="primary full">导出数据源 + 高清图表 ZIP</button><button id="exportModelBtn" class="full">导出可编辑场景 GLB</button></div><div class="card"><h2>图表预览</h2><div id="figureGallery" class="figure-gallery"></div></div><div class="card"><h2>实验摘要</h2><pre id="summary">尚未运行</pre></div>
+        </section>
+      </aside>
+      <section class="viewport-wrap"><div id="viewport"></div><div class="viewport-overlay top-left"><span id="sceneMode">PBR 示例场景</span><span id="fps">0 FPS</span></div><div class="viewport-overlay bottom-left">左键选择 · 拖拽旋转 · 右键平移 · 滚轮缩放 · W/E/R 变换 · Delete 删除 · Ctrl+D 复制</div><div id="selectionBox" class="selection-box hidden"></div></section>
+    </main>
+  </div>
+  <div id="globalFeedback" class="global-feedback hidden" role="status" aria-live="polite" aria-atomic="true">
+    <div class="global-feedback-card">
+      <div id="globalFeedbackIcon" class="global-feedback-icon">◌</div>
+      <div class="global-feedback-copy">
+        <b id="globalFeedbackTitle">正在处理</b>
+        <span id="globalFeedbackMessage">请稍候…</span>
+        <div class="global-progress"><i id="globalProgressBar"></i></div>
+        <small id="globalFeedbackPercent">处理中</small>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

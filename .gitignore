@@ -1,0 +1,17 @@
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+uploads/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+

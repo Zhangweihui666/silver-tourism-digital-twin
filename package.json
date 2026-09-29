@@ -1,0 +1,29 @@
+{
+  "name": "silver-tourism-digital-twin",
+  "version": "3.5.0",
+  "private": true,
+  "type": "module",
+  "description": "A semantic digital-twin and 500-agent simulation laboratory for age-friendly research in historic districts.",
+  "keywords": [
+    "digital-twin",
+    "agent-based-simulation",
+    "historic-district",
+    "age-friendly",
+    "openstreetmap",
+    "threejs",
+    "tourism-research"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhangweihui666/silver-tourism-digital-twin.git"
+  },
+  "homepage": "https://github.com/Zhangweihui666/silver-tourism-digital-twin#readme",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

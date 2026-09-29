@@ -1,0 +1,7 @@
+{
+  "cohorts": [
+    {"cohortName":"60-69","count":220,"meanSpeed":0.88,"speedStd":0.13,"navigationSkill":0.52,"signSensitivity":0.72,"riskAversion":0.62,"fatigueRate":0.25,"restThreshold":0.76,"fieldOfView":70,"informationCapacity":13},
+    {"cohortName":"70-79","count":190,"meanSpeed":0.73,"speedStd":0.11,"navigationSkill":0.39,"signSensitivity":0.68,"riskAversion":0.76,"fatigueRate":0.40,"restThreshold":0.62,"fieldOfView":60,"informationCapacity":10},
+    {"cohortName":"80+","count":90,"meanSpeed":0.61,"speedStd":0.10,"navigationSkill":0.24,"signSensitivity":0.61,"riskAversion":0.86,"fatigueRate":0.55,"restThreshold":0.50,"fieldOfView":52,"informationCapacity":8}
+  ]
+}
