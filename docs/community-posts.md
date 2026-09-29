@@ -1,6 +1,6 @@
 # Community launch copy
 
-以下文案在仓库正式公开后使用。发布前请把 `<REPO_URL>` 替换为真实地址。
+以下文案可用于介绍已经公开发布的项目。
 
 ## 中文长版（V2EX / OSCHINA / 研究社区）
 
@@ -25,13 +25,13 @@
 
 它是研究原型，不是测绘或工程设计软件；仓库也如实列出了当前限制和源码开放状态。希望它能成为数字孪生、适老化、旅游规划、历史街区和 Agent 仿真研究之间的一个交流起点。
 
-项目地址：<REPO_URL>
+项目地址：https://github.com/Zhangweihui666/silver-tourism-digital-twin
 
 如果你觉得方向有价值，欢迎试用、提 Issue，或者点一个 ⭐ Star。也非常欢迎分享真实研究场景和验证建议。
 
 ## 中文短版（社交媒体）
 
-开源了一个“历史街区 × 银发旅游 × 语义数字孪生 × 500 Agent 仿真”的研究原型：真实 OSM 几何、多源场景重建、三级研究任务、空间干预实验、科研图表与 GLB 导出。项目诚实标注了研究边界和当前限制。欢迎试用、提 Issue，也欢迎 ⭐ Star：<REPO_URL>
+开源了一个“历史街区 × 银发旅游 × 语义数字孪生 × 500 Agent 仿真”的研究原型：真实 OSM 几何、多源场景重建、三级研究任务、空间干预实验、科研图表与 GLB 导出。项目诚实标注了研究边界和当前限制。欢迎试用、提 Issue，也欢迎 ⭐ Star：https://github.com/Zhangweihui666/silver-tourism-digital-twin
 
 ## English (GitHub / LinkedIn / research communities)
 
@@ -54,6 +54,6 @@ Highlights:
 
 This is a research prototype rather than a surveying or engineering tool, and the repository documents its limitations transparently.
 
-Repository: <REPO_URL>
+Repository: https://github.com/Zhangweihui666/silver-tourism-digital-twin
 
 Feedback, validation cases, issues and ⭐ stars are very welcome.

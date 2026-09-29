@@ -125,6 +125,8 @@ flowchart LR
 
 欢迎提交 Issue、研究案例、数据格式适配、验证结果和可复现实验方案。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 与 [SECURITY.md](SECURITY.md)。
 
+项目发布介绍与开放讨论见 [Show and tell #1](https://github.com/Zhangweihui666/silver-tourism-digital-twin/discussions/1)。
+
 如果这个项目对你的数字孪生、适老化、历史街区或 Agent 仿真研究有帮助，欢迎点一个 ⭐ Star，让更多研究者看到它。
 
 ## 引用
